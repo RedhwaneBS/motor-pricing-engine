@@ -1,0 +1,55 @@
+[project]
+name = "mtpl-glm-pricing"
+random_seed = 42
+log_level = "INFO"
+
+[data]
+source_url = "https://github.com/dutangc/CASdatasets/raw/master/data/beMTPL97.rda"
+expected_sha256 = "955a821a7a693bf18076c425e4d5a5a99889f3c89e1fbd99eca6239c11e963a6"
+raw_path = "data/raw/beMTPL97.rda"
+processed_path = "data/processed/beMTPL97.csv"
+rda_object_name = "beMTPL97"
+download_timeout_seconds = 30
+allow_network_download = true
+max_exposure = 1.0
+min_ageph = 18
+max_ageph = 110
+consistency_rtol = 1e-6
+consistency_atol = 1e-6
+
+[split]
+test_size = 0.2
+stratify_column = "nclaims"
+min_stratum_count = 2
+
+[features]
+id_column = "id"
+exposure_column = "expo"
+target_columns = ["claim", "nclaims", "amount", "average"]
+derive_zone_from_postcode = true
+categorical_columns = ["coverage", "sex", "fuel", "use", "fleet", "zone"]
+numeric_columns = ["bm", "power", "agec"]
+spline_column = "ageph"
+spline_knot_quantiles = [0.05, 0.275, 0.50, 0.725, 0.95]
+spline_reference_age = 45.0
+unknown_category_policy = "raise"
+
+[model]
+frequency_family = "poisson"
+severity_family = "gamma"
+link = "log"
+max_iter = 100
+tol = 1e-8
+confidence_level = 0.95
+
+[evaluation]
+n_lift_bins = 10
+reports_dir = "reports"
+figures_dir = "reports/figures"
+metrics_filename = "metrics.json"
+relativities_filename = "relativities.csv"
+
+[artifacts]
+output_dir = "artifacts"
+bundle_filename = "pricing_bundle.joblib"
+manifest_filename = "manifest.json"
