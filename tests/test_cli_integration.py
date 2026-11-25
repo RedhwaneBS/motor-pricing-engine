@@ -154,7 +154,6 @@ def test_cli_accepts_config_and_log_level_after_subcommand(
 
     # Missing input file emits [FAIL] status line to stderr and returns exit code 1.
     assert (
-        main(["predict", "--config", str(toml_path), "--input", str(tmp_path / "missing.csv")])
-        == 1
+        main(["predict", "--config", str(toml_path), "--input", str(tmp_path / "missing.csv")]) == 1
     )
     assert "[FAIL] predict: DataIngestionError" in capsys.readouterr().err
